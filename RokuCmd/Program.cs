@@ -109,6 +109,7 @@ namespace RokuCmd
                 else
                 {
                     SendKeypress(Keypress.VolumeMute);
+                    return;
                 }
             }
 
