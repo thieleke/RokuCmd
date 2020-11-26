@@ -15,6 +15,17 @@ namespace RokuCmd
         public static string RokuIP = "10.0.0.131";
         static void Main(string[] args)
         {
+            List<string> cleanArgs = new List<string>();
+            foreach(string arg in args)
+            {
+                if(String.IsNullOrWhiteSpace(arg) == false)
+                {
+                    cleanArgs.Add(arg.Trim());
+                }
+            }
+
+            args = cleanArgs.ToArray();
+
             if(args.Length == 0)
             {
                 Console.WriteLine("Usage: rokucmd <YouTube URL, netflix|pluto|shout|youtube, mute (.seconds or minutes), status, pause (.seconds or minutes), Key value>");
@@ -23,13 +34,10 @@ namespace RokuCmd
 
             string arg_lower = args[0].ToLower();
 
-            if(GetPowerStatus() == false)
+            if(GetPowerStatus() == false && SetPower(true) == false)
             {
-                if(SetPower(true) == false)
-                {
-                    Console.WriteLine("Unable to turn on Roku");
-                    return;
-                }
+                Console.WriteLine("Unable to turn on Roku");
+                return;
             }
 
             try
@@ -55,6 +63,12 @@ namespace RokuCmd
             }
             catch
             {
+            }
+
+            if(arg_lower == "on")
+            {
+                // Already taken care of above
+                return;
             }
 
             if(arg_lower == "launch")
